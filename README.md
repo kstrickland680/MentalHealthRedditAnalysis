@@ -11,19 +11,34 @@ Users will be labeled based on flair in subreddits that require users to flag th
 
 ## Models
 ### Word2Vec with Random Forest
-I train a word2vec model using gensim and obtain word embeddings from it. I then use those embeddngs with a Random Forest Classifier. This model performs very poorly, even with paramater hypertuning. This is likely due to the number of classes and the class imbalance. In addition, we do not know if there is enough of a language difference to be able to classify someone as struggling with a certain mental health diagnosis based solely on how they communicate online about non-diagnose subjects.
+I train a word2vec model using gensim and obtain word embeddings from it. I then use those embeddngs with a Random Forest Classifier. This model performs very poorly, even with paramater hypertuning. In addition to data limitations, we do not know if there is enough of a language difference to be able to classify someone as struggling with a certain mental health diagnosis based solely on how they communicate online about non-diagnose subjects.  The final version of the Random Forest Classifier does not ignore the smaller classes. Interestingly, anxiety has a precision of 13%, even though recall is only 1%.  Depression only has a precision of 1% but has a recall score of 93.7%. PTSD has a precision of 11% and a recall of 2%.
 
 ### LSTM 
-I create encodings for the 50,000 most common words in the comment data, and train them using Keras LSTM. I do this because the vocabulary is very large, with numerous strange "words" that are only used once.  I then try to classify indviduals as neutral (not-diagnosed), or in one of the 6 diagnoses.  This model also does not perform well, likely because I chose poorly for the hidden dimension sizes. It completely ignores several classes and does not atempt to predict them.  
+I create encodings for the 50,000 most common words in the comment data, and train them using Keras LSTM. I do this because the vocabulary is very large, with numerous strange "words" that are only used once.  I then try to classify indviduals as neutral (not-diagnosed), or in one of the 6 diagnoses.  The final version of this model tries to identify each class, but struggles to do so well. The neutral class has a recall of 24.87%, and a precision of 83%.
 
-### LSTM take 2
-I once again try to build a LSTM model. This time, I increase the size of the hidden dimensions. I also increase the weights of the "experimental" classes, to try to force the model to pay attention to them. This model still does not do well, ignoring several classes completely.  
+ADHD - 23.8% recall, 4% Precision
+Anxiety - Recall 9.89%, Precision 5%
+Bipolar - Recall 7% Precision 2.4%
+BPD - Recall 6.8%, Precision 2.3%
+Depression - Recall 18.88%, Precision 1.8%
+PTSD - Recall 19.4%, Precision 6.2%
 
 ### Strategy Change and Success! 
-I decide that comment data alone is not enough, so I use both the submission and comment data. I also use sbert to increase the accuracy of my word embeddings. In addition, I undersample from the "control" group. Finally, I break the process into 2 different classifications - first a binary classification of whether someone is struggling with their mental health or not, and then for those that are, a second model to classify which mental illness they may be struggling with.  
+I decide that comment data alone is not enough, so I use both the submission and comment data. I also use SBERT to increase the accuracy of my word embeddings. In addition, I undersample from the "control" group. Finally, I break the process into 2 different classifications - first a binary classification of whether someone is struggling with their mental health or not, and then for those that are, a second model to classify which mental illness they may be struggling with.  
+
+#### Binary Classifier
+The overall macro f1 score is .69, precision is .68, and recall is .7. For the mental health class, the f1-score is .59, precision is .55, and recall is .64. 
+
+#### Which Mental Health Illness?
+I now train a model that takes only individuals who are strugglng with their mental health, and predicts which mental illness they are struggling with. 
+
+The first version of this model has a f1 score of .297.  It does best with anxiety (recall of .65 and precision of .36) and PTSD (recall of .53 and precision of .36). Also interestingly, PTSD is misclassified as anxiety 473 times, and anxiety is misclassified as PTSD 358 times. These disorders are closely linked, so it makes sense the model is picking up on this.
+
+I then retrain the model using class weights. This model has a weighted f1-score of .27, precision of .32, and recall of .27.  ADHD's recall and precision are similiar to each other at .25 and .27.  Anxiety's precision is .47 and recall is .17.  Bipolar's recall is .43 but precision is .2.  BPD's recall is .29 and precision is .19.  Depression has a recall of .18 and precision of .17.  PTSD's recall is .34 and precision is .35. Interestingly, in this model PTSD is linked more closely to bipolar than anxiety.  
+
 
 ## Conclusions: 
-Posts in non-mental health subreddits can also show a lot about whether someone is struggling with their mental health, whether from patterns in speech or from the content of the posts. The model had the easiest time idenifying those with PTSD or anxiety. 
+Posts in non-mental health subreddits can also show a lot about whether someone is struggling with their mental health, whether from patterns in speech or from the content of the posts. I was able to train a model on non-mental health related social media posts that could classify users as struggling with their mental health or not, but was unable to train a model solely on non-mental health posts that could classfy which mental health illness someone is likely to have with a high degree of precision or recall. The models struggled to distinguish between the disorders. 
 
 ### Business Recommendations
 *   Create an online support group: Many people form strong relationships and groups online.  Some people feel more comfortable opening up when not having to speak out loud or show their face.  Creating a support group that's entirely online could be very successful and helpful for individuals. 
