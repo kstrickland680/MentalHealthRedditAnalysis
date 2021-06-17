@@ -33,9 +33,11 @@ The overall macro f1 score is .69, precision is .68, and recall is .7. For the m
 I now train a model that takes only individuals who are strugglng with their mental health, and predicts which mental illness they are struggling with. 
 
 The first version of this model has a f1 score of .297.  It does best with anxiety (recall of .65 and precision of .36) and PTSD (recall of .53 and precision of .36). Also interestingly, PTSD is misclassified as anxiety 473 times, and anxiety is misclassified as PTSD 358 times. These disorders are closely linked, so it makes sense the model is picking up on this.
+
 ![alt text](https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/first_confusionmatrix.png)
 
-I then retrain the model using class weights. This model has a weighted f1-score of .27, precision of .32, and recall of .27.  ADHD's recall and precision are similiar to each other at .25 and .27.  Anxiety's precision is .47 and recall is .17.  Bipolar's recall is .43 but precision is .2.  BPD's recall is .29 and precision is .19.  Depression has a recall of .18 and precision of .17.  PTSD's recall is .34 and precision is .35. Interestingly, in this model PTSD is linked more closely to bipolar than anxiety.  
+I then retrain the model using class weights. This model has a weighted f1-score of .27, precision of .32, and recall of .27.  ADHD's recall and precision are similiar to each other at .25 and .27.  Anxiety's precision is .47 and recall is .17.  Bipolar's recall is .43 but precision is .2.  BPD's recall is .29 and precision is .19.  Depression has a recall of .18 and precision of .17.  PTSD's recall is .34 and precision is .35. Interestingly, in this model PTSD is linked more closely to bipolar than anxiety. 
+
 ![alt text](https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/final_confusionmatrix.png)
 
 ## Conclusions: 
