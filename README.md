@@ -33,10 +33,10 @@ The overall macro f1 score is .69, precision is .68, and recall is .7. For the m
 I now train a model that takes only individuals who are strugglng with their mental health, and predicts which mental illness they are struggling with. 
 
 The first version of this model has a f1 score of .297.  It does best with anxiety (recall of .65 and precision of .36) and PTSD (recall of .53 and precision of .36). Also interestingly, PTSD is misclassified as anxiety 473 times, and anxiety is misclassified as PTSD 358 times. These disorders are closely linked, so it makes sense the model is picking up on this.
-[IMG]https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/first_confusionmatrix.png
+![alt text](https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/first_confusionmatrix.png)
 
 I then retrain the model using class weights. This model has a weighted f1-score of .27, precision of .32, and recall of .27.  ADHD's recall and precision are similiar to each other at .25 and .27.  Anxiety's precision is .47 and recall is .17.  Bipolar's recall is .43 but precision is .2.  BPD's recall is .29 and precision is .19.  Depression has a recall of .18 and precision of .17.  PTSD's recall is .34 and precision is .35. Interestingly, in this model PTSD is linked more closely to bipolar than anxiety.  
-[IMG]https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/final_confusionmatrix.png
+![alt text](https://github.com/kstrickland680/MentalHealthRedditAnalysis/blob/main/final_confusionmatrix.png)
 
 ## Conclusions: 
 Posts in non-mental health subreddits can also show a lot about whether someone is struggling with their mental health, whether from patterns in speech or from the content of the posts. I was able to train a model on non-mental health related social media posts that could classify users as struggling with their mental health or not, but was unable to train a model solely on non-mental health posts that could classfy which mental health illness someone is likely to have with a high degree of precision or recall. The models struggled to distinguish between the disorders. 
